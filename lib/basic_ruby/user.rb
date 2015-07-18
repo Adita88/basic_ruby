@@ -34,11 +34,19 @@ class User
   end
 
   def save
+    validate_first_name
     @id = @@users.count + 1
     @@users << self
   end
 
   def destroy
     @@users.delete(self)
+  end
+
+  private
+  def validate_first_name
+    if first_name.class !=String || first_name == "" || first_name.delete(' ').count < 3
+    raise "Invalid value for first_name"     
+    end
   end
 end
