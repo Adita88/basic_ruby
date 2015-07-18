@@ -36,13 +36,13 @@ describe User do
       expect(User.count).to eq 1
     end
 
-    it "removes the user instance from the @@users array" do
+    it 'removes the user instance from the @@users array' do
       user = User.new
       user.first_name = "Francisco"
       user.save
-      expect(User.count).to eq 1
-      user.destroy
-      expect(User.count).to eq 0
+      # expect(User.count).to eq 1
+      expect { user.destroy }.to change(User, :count).by(-1)
+      # expect(User.count).to eq 0
     end
   end
 
@@ -55,17 +55,32 @@ describe User do
       expect(User.all).to eq [user]
     end
 
-    it "finds the user with the given id" do
+    it 'finds the user with the given id' do
       user = User.new
-      user.first_name = "Mariana"
+      user.first_name = "Jose"
       user.save
 
       user2 = User.new
-      user2.first_name = "Mariana Dos"
+      user2.first_name = "Francisco"
       user2.save
 
       expect(User.find(user2.id)).to eq user2
     end
 
+    it 'finds all users with the given first_name' do
+      user = User.new
+      user.first_name = "Jose"
+      user.save
+
+      user2 = User.new
+      user2.first_name = "Francisco"
+      user2.save
+
+      user3 = User.new
+      user3.first_name = "Jose"
+      user3.save
+
+      expect(User.find_by(:first_name, "Jose")).to eq [user, user3]
+    end
   end
 end
